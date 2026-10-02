@@ -30,7 +30,7 @@
                     TextColor="White" />
 
                 <Button
-                    Margin="40 0 10 0"
+                    Margin="40, 0, 10, 0"
                     Text=">"
                     WidthRequest="60"
                     HeightRequest="60"
