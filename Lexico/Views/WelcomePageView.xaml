@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Lexico.View.WelcomingScreenView"
-             Title="">
+             x:Class="Lexico.Views.WelcomePageView"
+             Title=""
+             BackgroundColor="#325387">
     <Grid>
         <Image
             Source="welcoming_screen_bg.png"
@@ -30,7 +31,9 @@
                     TextColor="White" />
 
                 <Button
-                    Margin="40, 0, 10, 0"
+                    Clicked="Button_Clicked"
+                    FontFamily="OpenSansRegular"
+                    Margin="0, 20, 0, 0"
                     Text=">"
                     WidthRequest="60"
                     HeightRequest="60"

@@ -70,9 +70,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="View\WelcomingScreenView.xaml">
+	  <Compile Update="Views\HomePageView.xaml.cs">
+	    <DependentUpon>HomePageView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\WelcomePageView.xaml.cs">
+	    <DependentUpon>WelcomePageView.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\HomePageView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\WelcomePageView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Resources\Data\" />
 	</ItemGroup>
 
 </Project>
