@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lexico.Views.SessionPageView"
+             BackgroundColor="#2F5089">
+
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="White" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="TextColor" Value="#2F5089" />
+            <Setter Property="CornerRadius" Value="26" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20,40,20,24" RowSpacing="16">
+
+        <!-- sesja -->
+        <Label Grid.Row="0" Text="{Binding Progress}" IsVisible="{Binding IsPlaying}" />
+
+        <VerticalStackLayout Grid.Row="1" IsVisible="{Binding IsPlaying}" VerticalOptions="Center" Spacing="16">
+            <VerticalStackLayout.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding FlipCommand}" />
+            </VerticalStackLayout.GestureRecognizers>
+
+            <Label Text="{Binding Word}" FontSize="48" HorizontalOptions="Center" />
+            <Label Text="{Binding Info}" HorizontalOptions="Center" Opacity="0.8" />
+            <Label Text="{Binding Phonetics}" HorizontalOptions="Center" Opacity="0.8" />
+
+            <Label Text="Dotknij, aby odwrócić" FontSize="13" Opacity="0.6"
+                   HorizontalOptions="Center" IsVisible="{Binding IsFront}" />
+            <Label Text="{Binding Examples}" FontSize="16" IsVisible="{Binding IsFlipped}" />
+        </VerticalStackLayout>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" ColumnSpacing="10" IsVisible="{Binding IsFlipped}">
+            <Button Grid.Column="0" Text="Nie umiem" Command="{Binding RateCommand}" CommandParameter="0" />
+            <Button Grid.Column="1" Text="Prawie" Command="{Binding RateCommand}" CommandParameter="1" />
+            <Button Grid.Column="2" Text="Umiem" Command="{Binding RateCommand}" CommandParameter="2" />
+        </Grid>
+
+        <!-- koniec -->
+        <VerticalStackLayout Grid.Row="1" Grid.RowSpan="2" IsVisible="{Binding IsFinished}"
+                             VerticalOptions="Center" Spacing="24">
+            <Label Text="{Binding Summary}" FontSize="28" HorizontalOptions="Center" />
+            <Button Text="Jeszcze raz" Command="{Binding RestartCommand}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lexico.Views.SettingsPageView"
+             BackgroundColor="White"
+             NavigationPage.HasNavigationBar="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,48,24,24" Spacing="12">
+
+            <Label Text="&lt; Home" FontSize="24" TextColor="#1C1E2B">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Text="Settings" FontSize="34" FontAttributes="Bold" TextColor="#1C1E2B" Margin="0,0,0,24" />
+
+            <Label Text="Selected word level" FontSize="16" TextColor="#1C1E2B" />
+            <Picker x:Name="LevelPicker" TextColor="#1C1E2B" SelectedIndexChanged="OnLevelChanged" />
+
+            <Label Text="Max words to review per day" FontSize="16" TextColor="#1C1E2B" Margin="0,16,0,0" />
+            <Entry x:Name="MaxEntry" Keyboard="Numeric" TextColor="#1C1E2B" TextChanged="OnMaxChanged" />
+
+            <Label Text="DANGER ZONE" FontSize="16" TextColor="#B00020" Margin="0,48,0,0" />
+            <Label Text="Reset your course" FontSize="16" TextColor="#1C1E2B" />
+            <Button Text="Reset" Clicked="OnResetClicked"
+                    BackgroundColor="#5C0000" TextColor="White" CornerRadius="4" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

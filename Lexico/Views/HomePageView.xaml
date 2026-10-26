@@ -1,13 +1,71 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Lexico.ViewModels"
              x:Class="Lexico.Views.HomePageView"
-             Title=""
-             BackgroundColor="White">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             x:DataType="vm:HomePageViewModel"
+             BackgroundColor="White"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+        <Style x:Key="Value" TargetType="Label">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="TextColor" Value="#1C1E2B" />
+        </Style>
+        <Style x:Key="Caption" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="#9A9CA8" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,48,24,24" Spacing="16">
+
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout>
+                    <Label Text="{Binding Time}" FontSize="24" TextColor="#2B2D42" />
+                    <Label Text="{Binding Date}" FontSize="40" TextColor="#1C1E2B" />
+                </VerticalStackLayout>
+                <Label Grid.Column="1" Text="⚙" FontSize="28" TextColor="#2F5089" VerticalOptions="Start">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSettingsTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+
+            <Border BackgroundColor="#E6E8EE" StrokeThickness="0" StrokeShape="RoundRectangle 12"
+                    HeightRequest="180" Padding="24">
+                <Border.Shadow>
+                    <Shadow Brush="Black" Opacity="0.25" Radius="6" Offset="0,3" />
+                </Border.Shadow>
+                <VerticalStackLayout VerticalOptions="End">
+                    <Label Text="{Binding WordsLeft}" FontSize="44" FontAttributes="Bold" TextColor="#2F5089" />
+                    <Label Text="words left to learn today" FontSize="20" TextColor="#2B2D42" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Start Recalling" Clicked="OnStartClicked"
+                    BackgroundColor="#2F5089" TextColor="White" CornerRadius="8" />
+
+            <Label Text="{Binding CourseTitle}" FontSize="24" TextColor="#1C1E2B" Margin="0,16,0,0" />
+
+            <VerticalStackLayout>
+                <Label Text="{Binding Percent}" Style="{StaticResource Value}" />
+                <Label Text="Course Progress" Style="{StaticResource Caption}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="{Binding Reviewed}" Style="{StaticResource Value}" />
+                <Label Text="Words Reviewed" Style="{StaticResource Caption}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="{Binding ToReview}" Style="{StaticResource Value}" />
+                <Label Text="Words to Review Again" Style="{StaticResource Caption}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+                <Label Text="{Binding Learned}" Style="{StaticResource Value}" />
+                <Label Text="Words Learned" Style="{StaticResource Caption}" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
