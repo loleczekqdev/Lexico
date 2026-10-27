@@ -8,15 +8,23 @@ public class SessionPageViewModel : ViewModelBase
     readonly string _level;
     Session _session;
 
-    string _word = "", _info = "", _phonetics = "", _examples = "", _progress = "", _summary = "";
-    bool _isFlipped, _isFinished;
+    string _word = "", _info = "", _phonetics = "", _progress = "", _summary = "";
+    string _knownCount = "0", _almostCount = "0", _notKnownCount = "0";
+    IReadOnlyList<string> _examples = Array.Empty<string>();
+    double _progressValue;
+    bool _isFlipped, _isFinished, _showStats;
 
     public string Word { get => _word; set => Set(ref _word, value); }
     public string Info { get => _info; set => Set(ref _info, value); }
     public string Phonetics { get => _phonetics; set => Set(ref _phonetics, value); }
-    public string Examples { get => _examples; set => Set(ref _examples, value); }
+    public IReadOnlyList<string> Examples { get => _examples; set => Set(ref _examples, value); }
     public string Progress { get => _progress; set => Set(ref _progress, value); }
+    public double ProgressValue { get => _progressValue; set => Set(ref _progressValue, value); }
     public string Summary { get => _summary; set => Set(ref _summary, value); }
+    public string KnownCount { get => _knownCount; set => Set(ref _knownCount, value); }
+    public string AlmostCount { get => _almostCount; set => Set(ref _almostCount, value); }
+    public string NotKnownCount { get => _notKnownCount; set => Set(ref _notKnownCount, value); }
+    public bool ShowStats { get => _showStats; set => Set(ref _showStats, value); }
 
     public bool IsFlipped
     {
@@ -57,6 +65,7 @@ public class SessionPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             Summary = "Błąd: " + ex.Message;   // zamiast crasha pokaże, co poszło nie tak
+            ShowStats = false;
             IsFinished = true;
             return;
         }
@@ -73,9 +82,11 @@ public class SessionPageViewModel : ViewModelBase
         if (card == null)
         {
             var c = _session.Counts;
-            Summary = _session.Total == 0
-                ? "Na dziś koniec nauki"
-                : $"Koniec!\nNie umiem: {c[0]}\nPrawie: {c[1]}\nUmiem: {c[2]}";
+            NotKnownCount = c[0].ToString();
+            AlmostCount = c[1].ToString();
+            KnownCount = c[2].ToString();
+            ShowStats = _session.Total > 0;
+            Summary = _session.Total == 0 ? "Na dziś koniec nauki" : "Koniec sesji";
             IsFinished = true;
             return;
         }
@@ -83,7 +94,8 @@ public class SessionPageViewModel : ViewModelBase
         Word = card.Value.Word;
         Info = $"{card.Value.Type} · {card.Value.Level}";
         Phonetics = card.Value.Phonetics.Us;
-        Examples = string.Join("\n\n", card.Value.Examples);
+        Examples = card.Value.Examples;
         Progress = $"{_session.Position + 1}/{_session.Total}";
+        ProgressValue = (double)_session.Position / _session.Total;
     }
 }

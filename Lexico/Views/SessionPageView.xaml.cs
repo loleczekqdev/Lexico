@@ -18,4 +18,6 @@ public partial class SessionPageView : ContentPage
         base.OnAppearing();
         await _vm.StartAsync();
     }
+
+    async void OnBack(object? sender, EventArgs e) => await Navigation.PopAsync();
 }

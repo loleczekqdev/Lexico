@@ -1,50 +1,286 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Lexico.Views.SessionPageView"
-             BackgroundColor="#2F5089">
+<ContentPage
+    x:Class="Lexico.Views.SessionPageView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#2F5089"
+    NavigationPage.HasNavigationBar="False">
 
-    <ContentPage.Resources>
-        <Style TargetType="Label">
-            <Setter Property="TextColor" Value="White" />
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="BackgroundColor" Value="White" />
-            <Setter Property="TextColor" Value="#2F5089" />
-            <Setter Property="CornerRadius" Value="26" />
-        </Style>
-    </ContentPage.Resources>
+    <Grid
+        Padding="20,48,20,28"
+        RowDefinitions="Auto,*,56"
+        RowSpacing="20">
 
-    <Grid RowDefinitions="Auto,*,Auto" Padding="20,40,20,24" RowSpacing="16">
-
-        <!-- sesja -->
-        <Label Grid.Row="0" Text="{Binding Progress}" IsVisible="{Binding IsPlaying}" />
-
-        <VerticalStackLayout Grid.Row="1" IsVisible="{Binding IsPlaying}" VerticalOptions="Center" Spacing="16">
-            <VerticalStackLayout.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding FlipCommand}" />
-            </VerticalStackLayout.GestureRecognizers>
-
-            <Label Text="{Binding Word}" FontSize="48" HorizontalOptions="Center" />
-            <Label Text="{Binding Info}" HorizontalOptions="Center" Opacity="0.8" />
-            <Label Text="{Binding Phonetics}" HorizontalOptions="Center" Opacity="0.8" />
-
-            <Label Text="Dotknij, aby odwrócić" FontSize="13" Opacity="0.6"
-                   HorizontalOptions="Center" IsVisible="{Binding IsFront}" />
-            <Label Text="{Binding Examples}" FontSize="16" IsVisible="{Binding IsFlipped}" />
-        </VerticalStackLayout>
-
-        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" ColumnSpacing="10" IsVisible="{Binding IsFlipped}">
-            <Button Grid.Column="0" Text="Nie umiem" Command="{Binding RateCommand}" CommandParameter="0" />
-            <Button Grid.Column="1" Text="Prawie" Command="{Binding RateCommand}" CommandParameter="1" />
-            <Button Grid.Column="2" Text="Umiem" Command="{Binding RateCommand}" CommandParameter="2" />
+        <!--  góra: zamknij, postęp, licznik  -->
+        <Grid
+            Grid.Row="0"
+            ColumnDefinitions="Auto,*,Auto"
+            ColumnSpacing="16"
+            IsVisible="{Binding IsPlaying}">
+            <Label
+                FontSize="22"
+                Text="✕"
+                TextColor="White"
+                VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBack" />
+                </Label.GestureRecognizers>
+            </Label>
+            <ProgressBar
+                Grid.Column="1"
+                BackgroundColor="#4F6FA8"
+                Progress="{Binding ProgressValue}"
+                ProgressColor="White"
+                VerticalOptions="Center" />
+            <Label
+                Grid.Column="2"
+                FontSize="15"
+                Text="{Binding Progress}"
+                TextColor="White"
+                VerticalOptions="Center" />
         </Grid>
 
-        <!-- koniec -->
-        <VerticalStackLayout Grid.Row="1" Grid.RowSpan="2" IsVisible="{Binding IsFinished}"
-                             VerticalOptions="Center" Spacing="24">
-            <Label Text="{Binding Summary}" FontSize="28" HorizontalOptions="Center" />
-            <Button Text="Jeszcze raz" Command="{Binding RestartCommand}" />
+        <!--  fiszka  -->
+        <Border
+            Grid.Row="1"
+            Padding="28"
+            BackgroundColor="White"
+            IsVisible="{Binding IsPlaying}"
+            StrokeShape="RoundRectangle 28"
+            StrokeThickness="0">
+            <Border.Shadow>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.25"
+                    Radius="16"
+                    Offset="0,8" />
+            </Border.Shadow>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding FlipCommand}" />
+            </Border.GestureRecognizers>
+
+            <Grid>
+                <!--  przód  -->
+                <VerticalStackLayout
+                    IsVisible="{Binding IsFront}"
+                    Spacing="14"
+                    VerticalOptions="Center">
+                    <Border
+                        Padding="12,4"
+                        BackgroundColor="#E8EDF6"
+                        HorizontalOptions="Center"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="0">
+                        <Label
+                            FontSize="14"
+                            Text="{Binding Info}"
+                            TextColor="#2F5089" />
+                    </Border>
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="52"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Word}"
+                        TextColor="#1C2A4A" />
+                    <Label
+                        FontSize="20"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding Phonetics}"
+                        TextColor="#7A869E" />
+                </VerticalStackLayout>
+
+                <!--  tył  -->
+                <ScrollView IsVisible="{Binding IsFlipped}">
+                    <VerticalStackLayout Spacing="14">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="30"
+                            Text="{Binding Word}"
+                            TextColor="#1C2A4A" />
+                        <Label
+                            FontSize="16"
+                            Text="{Binding Phonetics}"
+                            TextColor="#7A869E" />
+                        <BoxView HeightRequest="1" Color="#E3E7EF" />
+                        <Label
+                            CharacterSpacing="2"
+                            FontSize="12"
+                            Text="PRZYKŁADY"
+                            TextColor="#7A869E" />
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Examples}" Spacing="14">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="4,*" ColumnSpacing="12">
+                                        <BoxView CornerRadius="2" Color="#2F5089" />
+                                        <Label
+                                            Grid.Column="1"
+                                            FontSize="17"
+                                            Text="{Binding .}"
+                                            TextColor="#1C2A4A" />
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Grid>
+        </Border>
+
+        <!--  dół: podpowiedź albo ocena (to samo miejsce, żeby karta nie skakała)  -->
+        <Label
+            Grid.Row="2"
+            FontSize="14"
+            HorizontalOptions="Center"
+            Opacity="0.7"
+            Text="Dotknij kartę, aby zobaczyć przykłady"
+            TextColor="White"
+            VerticalOptions="Center">
+            <Label.Triggers>
+                <DataTrigger
+                    Binding="{Binding IsPlaying}"
+                    TargetType="Label"
+                    Value="False">
+                    <Setter Property="IsVisible" Value="False" />
+                </DataTrigger>
+                <DataTrigger
+                    Binding="{Binding IsFlipped}"
+                    TargetType="Label"
+                    Value="True">
+                    <Setter Property="IsVisible" Value="False" />
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
+
+        <Grid
+            Grid.Row="2"
+            ColumnDefinitions="*,*,*"
+            ColumnSpacing="10"
+            IsVisible="{Binding IsFlipped}">
+            <Button
+                Grid.Column="0"
+                BackgroundColor="#E5484D"
+                Command="{Binding RateCommand}"
+                CommandParameter="0"
+                CornerRadius="16"
+                FontSize="15"
+                Text="Nie umiem"
+                TextColor="White" />
+            <Button
+                Grid.Column="1"
+                BackgroundColor="#F9A929"
+                Command="{Binding RateCommand}"
+                CommandParameter="1"
+                CornerRadius="16"
+                FontSize="15"
+                Text="Prawie"
+                TextColor="White" />
+            <Button
+                Grid.Column="2"
+                BackgroundColor="#30A46C"
+                Command="{Binding RateCommand}"
+                CommandParameter="2"
+                CornerRadius="16"
+                FontSize="15"
+                Text="Umiem"
+                TextColor="White" />
+        </Grid>
+
+        <!--  koniec sesji  -->
+        <VerticalStackLayout
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            IsVisible="{Binding IsFinished}"
+            Spacing="28"
+            VerticalOptions="Center">
+            <Label
+                FontAttributes="Bold"
+                FontSize="34"
+                HorizontalTextAlignment="Center"
+                Text="{Binding Summary}"
+                TextColor="White" />
+
+            <Grid
+                ColumnDefinitions="*,*,*"
+                ColumnSpacing="12"
+                IsVisible="{Binding ShowStats}">
+                <Border
+                    Grid.Column="0"
+                    Padding="12,18"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 18"
+                    StrokeThickness="0">
+                    <VerticalStackLayout Spacing="2">
+                        <Label
+                            FontSize="32"
+                            HorizontalOptions="Center"
+                            Text="{Binding NotKnownCount}"
+                            TextColor="#E5484D" />
+                        <Label
+                            FontFamily="JakartaMedium"
+                            FontSize="13"
+                            HorizontalOptions="Center"
+                            Text="Nie umiem"
+                            TextColor="#7A869E" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border
+                    Grid.Column="1"
+                    Padding="12,18"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 18"
+                    StrokeThickness="0">
+                    <VerticalStackLayout Spacing="2">
+                        <Label
+                            FontSize="32"
+                            HorizontalOptions="Center"
+                            Text="{Binding AlmostCount}"
+                            TextColor="#F5A524" />
+                        <Label
+                            FontFamily="JakartaMedium"
+                            FontSize="13"
+                            HorizontalOptions="Center"
+                            Text="Prawie"
+                            TextColor="#7A869E" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border
+                    Grid.Column="2"
+                    Padding="12,18"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 18"
+                    StrokeThickness="0">
+                    <VerticalStackLayout Spacing="2">
+                        <Label
+                            FontSize="32"
+                            HorizontalOptions="Center"
+                            Text="{Binding KnownCount}"
+                            TextColor="#30A46C" />
+                        <Label
+                            FontFamily="JakartaMedium"
+                            FontSize="13"
+                            HorizontalOptions="Center"
+                            Text="Umiem"
+                            TextColor="#7A869E" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Button
+                BackgroundColor="White"
+                Command="{Binding RestartCommand}"
+                CornerRadius="16"
+                FontAttributes="Bold"
+                FontSize="16"
+                HeightRequest="56"
+                IsVisible="{Binding ShowStats}"
+                Text="Jeszcze raz"
+                TextColor="#2F5089" />
+            <Button
+                BackgroundColor="Transparent"
+                Clicked="OnBack"
+                FontSize="16"
+                Text="Wróć"
+                TextColor="White" />
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
