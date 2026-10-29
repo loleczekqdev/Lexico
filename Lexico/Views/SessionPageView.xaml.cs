@@ -6,7 +6,6 @@ public partial class SessionPageView : ContentPage
 {
     readonly SessionPageViewModel _vm;
 
-    // poziom wybierany w konstruktorze: new SessionPageView("B1")
     public SessionPageView(string level)
     {
         InitializeComponent();

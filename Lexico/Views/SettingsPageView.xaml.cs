@@ -15,7 +15,7 @@ public partial class SettingsPageView : ContentPage
         _loading = false;
     }
 
-    // zmiana kursu kasuje cały postęp (po potwierdzeniu)
+    // Po zmianie poziomu trzeba potwierdzić wyczyszczenie postępu.
     async void OnLevelChanged(object? sender, EventArgs e)
     {
         if (_loading || LevelPicker.SelectedItem is not string level || level == Settings.Level) return;

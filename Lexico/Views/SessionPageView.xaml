@@ -11,7 +11,7 @@
         RowDefinitions="Auto,*,56"
         RowSpacing="20">
 
-        <!--  góra: zamknij, postęp, licznik  -->
+        <!-- Nagłówek sesji. -->
         <Grid
             Grid.Row="0"
             ColumnDefinitions="Auto,*,Auto"
@@ -40,7 +40,7 @@
                 VerticalOptions="Center" />
         </Grid>
 
-        <!--  fiszka  -->
+        <!-- Karta ze słowem. -->
         <Border
             Grid.Row="1"
             Padding="28"
@@ -60,7 +60,7 @@
             </Border.GestureRecognizers>
 
             <Grid>
-                <!--  przód  -->
+                <!-- Początkowo pokazujemy tylko słowo. -->
                 <VerticalStackLayout
                     IsVisible="{Binding IsFront}"
                     Spacing="14"
@@ -89,7 +89,7 @@
                         TextColor="#7A869E" />
                 </VerticalStackLayout>
 
-                <!--  tył  -->
+                <!-- Po obróceniu pokazujemy przykłady. -->
                 <ScrollView IsVisible="{Binding IsFlipped}">
                     <VerticalStackLayout Spacing="14">
                         <Label
@@ -126,7 +126,7 @@
             </Grid>
         </Border>
 
-        <!--  dół: podpowiedź albo ocena (to samo miejsce, żeby karta nie skakała)  -->
+        <!-- Podpowiedź i przyciski zajmują to samo miejsce. -->
         <Label
             Grid.Row="2"
             FontSize="14"
@@ -185,7 +185,7 @@
                 TextColor="White" />
         </Grid>
 
-        <!--  koniec sesji  -->
+        <!-- Podsumowanie sesji. -->
         <VerticalStackLayout
             Grid.Row="0"
             Grid.RowSpan="3"

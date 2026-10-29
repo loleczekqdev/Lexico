@@ -5,25 +5,20 @@ namespace Lexico.Services;
 
 public record LevelStats(int Total, int Learned, int Reviewed, int ToReview);
 
-// Jedna sesja: new Session("B1") -> await StartAsync() -> Current / Rate(0..2)
-//
-// Algorytm:
-//  - liczba kart = limit dzienny (Settings.MaxPerDay) minus to, co już zrobiono dziś
-//  - pomijamy słowa ocenione "Umiem" (2)
-//  - 70% kart z wybranego poziomu, 30% z niższych (braki uzupełniamy czymkolwiek z puli)
-//  - "Nie umiem" (0) i "Prawie" (1) wracają w kolejnych sesjach same,
-//    bo nie są oznaczone jako opanowane
+// Sesja ładuje karty dla wybranego poziomu i zapisuje ocenę każdej z nich.
+// Większość kart pochodzi z wybranego poziomu, a reszta z niższych.
+// Słowa oznaczone jako "Umiem" nie wracają do powtórek.
 public class Session
 {
     public static readonly string[] Levels = { "A1", "A2", "B1", "B2", "C1" };
     static string ProgressPath => Path.Combine(FileSystem.AppDataDirectory, "progress.json");
 
     readonly string _level;
-    Dictionary<int, int> _progress = new();   // id słowa -> 0 Nie umiem, 1 Prawie, 2 Umiem
+    Dictionary<int, int> _progress = new();
     List<WordEntry> _cards = new();
     int _index;
 
-    public int[] Counts { get; } = new int[3];  // ile ocen w sesji: Nie umiem, Prawie, Umiem
+    public int[] Counts { get; } = new int[3];
 
     public Session(string level)
     {
@@ -76,7 +71,7 @@ public class Session
         Settings.DoneToday = 0;
     }
 
-    // Statystyki do ekranu głównego: słowa z wybranego poziomu i niższych
+    // Na ekranie głównym pokazujemy też słowa z niższych poziomów.
     public static async Task<LevelStats> GetStatsAsync(string level)
     {
         var all = await LoadWordsAsync();
@@ -109,7 +104,7 @@ public class Session
         return new();
     }
 
-    // words.json z Resources/Raw; toleruje brak [ ] i przecinek po ostatnim obiekcie
+    // Plik może być tablicą albo listą obiektów bez nawiasów.
     static async Task<List<WordEntry>> LoadWordsAsync()
     {
         using var stream = await FileSystem.OpenAppPackageFileAsync("words.json");

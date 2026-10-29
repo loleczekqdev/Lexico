@@ -42,7 +42,7 @@ public class SessionPageViewModel : ViewModelBase
     public bool IsPlaying => !IsFinished;
 
     public ICommand FlipCommand { get; }
-    public ICommand RateCommand { get; }      // parametr: "0" Nie umiem, "1" Prawie, "2" Umiem
+    public ICommand RateCommand { get; }
     public ICommand RestartCommand { get; }
 
     public SessionPageViewModel(string level)
@@ -64,7 +64,7 @@ public class SessionPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Summary = "Błąd: " + ex.Message;   // zamiast crasha pokaże, co poszło nie tak
+            Summary = "Błąd: " + ex.Message;
             ShowStats = false;
             IsFinished = true;
             return;

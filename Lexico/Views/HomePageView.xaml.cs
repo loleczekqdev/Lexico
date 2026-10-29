@@ -13,7 +13,6 @@ public partial class HomePageView : ContentPage
         BindingContext = _vm = new HomePageViewModel();
     }
 
-    // odświeża statystyki także po powrocie z sesji i z ustawień
     protected override async void OnAppearing()
     {
         base.OnAppearing();

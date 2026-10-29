@@ -37,7 +37,7 @@ public class HomePageViewModel : ViewModelBase
         }
         catch
         {
-            WordsLeft = "?";   // np. brak words.json
+            WordsLeft = "?";
         }
     }
 }

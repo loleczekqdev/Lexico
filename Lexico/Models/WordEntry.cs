@@ -1,6 +1,6 @@
 namespace Lexico.Models;
 
-// Jeden element words.json: { "id": 0, "value": { ... } }
+// Pojedynczy wpis z words.json.
 public class WordEntry
 {
     public int Id { get; set; }
