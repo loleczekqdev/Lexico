@@ -15,12 +15,12 @@ public partial class SettingsPageView : ContentPage
         _loading = false;
     }
 
-    // Po zmianie poziomu trzeba potwierdzić wyczyszczenie postępu.
+    // zmiana kursu kasuje cały postęp (po potwierdzeniu)
     async void OnLevelChanged(object? sender, EventArgs e)
     {
         if (_loading || LevelPicker.SelectedItem is not string level || level == Settings.Level) return;
 
-        bool ok = await DisplayAlert("Zmiana kursu", "Zmiana poziomu usunie cały postęp. Kontynuować?", "Tak", "Anuluj");
+        bool ok = await DisplayAlertAsync("Zmiana kursu", "Zmiana poziomu usunie cały postęp. Kontynuować?", "Tak", "Anuluj");
         if (ok)
         {
             Settings.Level = level;
@@ -42,7 +42,7 @@ public partial class SettingsPageView : ContentPage
 
     async void OnResetClicked(object? sender, EventArgs e)
     {
-        bool ok = await DisplayAlert("Reset", "Usunąć cały postęp w kursie?", "Tak", "Anuluj");
+        bool ok = await DisplayAlertAsync("Reset", "Usunąć cały postęp w kursie?", "Tak", "Anuluj");
         if (ok) Session.ResetProgress();
     }
 

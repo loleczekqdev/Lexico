@@ -1,6 +1,6 @@
 namespace Lexico.Services;
 
-// Ustawienia w Preferences (wbudowane w MAUI, bez paczek).
+// Ustawienia w Preferences.
 public static class Settings
 {
     public static string Level

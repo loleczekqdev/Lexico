@@ -10,6 +10,9 @@
         Title="WelcomingScreen"
         ContentTemplate="{DataTemplate local:WelcomePageView}"
         Route="WelcomePageView" />
-
+    <ShellContent
+    Title="HomePage"
+    ContentTemplate="{DataTemplate local:HomePageView}"
+    Route="HomePageView" />
 
 </Shell>
