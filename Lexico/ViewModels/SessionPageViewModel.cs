@@ -1,3 +1,4 @@
+
 using System.Windows.Input;
 using Lexico.Services;
 
@@ -43,6 +44,11 @@ public class SessionPageViewModel : ViewModelBase
 
     public ICommand FlipCommand { get; }
     public ICommand RateCommand { get; }
+    //krzysiek
+
+    // Udostępnia komendę pomijania słówka, którą będzie wywoływał nowy przycisk w XAML.
+    public ICommand SkipCommand { get; }
+
     public ICommand RestartCommand { get; }
 
     public SessionPageViewModel(string level)
@@ -52,6 +58,19 @@ public class SessionPageViewModel : ViewModelBase
 
         FlipCommand = new Command(() => IsFlipped = !IsFlipped);
         RateCommand = new Command<string>(s => { _session.Rate(int.Parse(s)); Show(); });
+
+        // Tworzy komendę wykonywaną po kliknięciu przycisku „Pomiń”.
+        SkipCommand = new Command(() =>
+        {
+            // Wywołuje metodę Session.Skip(), która przesuwa indeks na następną kartę bez oceniania bieżącej.
+            _session.Skip();
+
+            // Odświeża zawartość ekranu, aby wyświetlić następne słówko lub podsumowanie sesji.
+            Show();
+        });
+
+        //krzysiek^
+
         RestartCommand = new Command(async () => await StartAsync());
     }
 

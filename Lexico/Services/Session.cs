@@ -64,6 +64,24 @@ public class Session
         _index++;
     }
 
+    //krzysiek
+
+
+    // Pomija aktualną kartę bez zapisywania oceny jej znajomości.
+    public void Skip()
+    {
+        // Sprawdza, czy istnieje aktualna karta do pominięcia.
+        // Jeśli Current zwraca null, oznacza to koniec dostępnych słówek.
+        if (Current == null)
+            return; // Kończy metodę, aby nie przesuwać indeksu poza koniec sesji.
+
+        // Zwiększa indeks aktualnej karty o jeden.
+        // Dzięki temu następne odwołanie do Current zwróci kolejne słówko.
+        _index++;
+    }
+
+    //krzysiek^
+
     // Zmiana kursu / reset: kasuje cały postęp
     public static void ResetProgress()
     {

@@ -151,39 +151,62 @@
             </Label.Triggers>
         </Label>
 
+
+        <!-- Kontener przycisków ocen i pomijania, widoczny po odwróceniu karty. -->
         <Grid
             Grid.Row="2"
-            ColumnDefinitions="*,*,*"
-            ColumnSpacing="10"
+            ColumnDefinitions="*,*,*,*" 
+            ColumnSpacing="6"
             IsVisible="{Binding IsFlipped}">
+
+            <!-- Przycisk oceny 0: użytkownik nie zna danego słówka. -->
             <Button
                 Grid.Column="0"
                 BackgroundColor="#E5484D"
                 Command="{Binding RateCommand}"
                 CommandParameter="0"
                 CornerRadius="16"
-                FontSize="15"
+                FontSize="12"
+                Padding="2"
                 Text="Nie umiem"
                 TextColor="White" />
+
+            <!-- Przycisk oceny 1: użytkownik zna słówko tylko częściowo. -->
             <Button
                 Grid.Column="1"
                 BackgroundColor="#F9A929"
                 Command="{Binding RateCommand}"
                 CommandParameter="1"
                 CornerRadius="16"
-                FontSize="15"
+                FontSize="12"
+                Padding="2"
                 Text="Prawie"
                 TextColor="White" />
+
+            <!-- Przycisk oceny 2: użytkownik dobrze zna dane słówko. -->
             <Button
                 Grid.Column="2"
                 BackgroundColor="#30A46C"
                 Command="{Binding RateCommand}"
                 CommandParameter="2"
                 CornerRadius="16"
-                FontSize="15"
+                FontSize="12"
+                Padding="2"
                 Text="Umiem"
                 TextColor="White" />
+
+            <!-- Nowy przycisk pomijania: nie przekazuje oceny do RateCommand. -->
+            <Button
+                Grid.Column="3"
+                BackgroundColor="#6482AC"
+                Command="{Binding SkipCommand}"
+                CornerRadius="16"
+                FontSize="12"
+                Padding="2"
+                Text="Pomiń"
+                TextColor="White" />
         </Grid>
+
 
         <!-- Podsumowanie sesji. -->
         <VerticalStackLayout
