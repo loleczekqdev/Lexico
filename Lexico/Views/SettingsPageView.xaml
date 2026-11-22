@@ -18,8 +18,30 @@
             <Label Text="Selected word level" FontSize="16" TextColor="#1C1E2B" />
             <Picker x:Name="LevelPicker" TextColor="#1C1E2B" SelectedIndexChanged="OnLevelChanged" />
 
-            <Label Text="Max words to review per day" FontSize="16" TextColor="#1C1E2B" Margin="0,16,0,0" />
-            <Entry x:Name="MaxEntry" Keyboard="Numeric" TextColor="#1C1E2B" TextChanged="OnMaxChanged" />
+            <!-- krzysiek -->
+            
+            <Label Text="Max words to review per day"
+                   FontSize="16"
+                   TextColor="#1C1E2B"
+                   Margin="0,16,0,0" />
+
+            <Entry x:Name="MaxEntry"
+                   Keyboard="Numeric"
+                   TextColor="#1C1E2B"
+                   TextChanged="OnMaxChanged"
+                   MaxLength="3" />
+
+            <Label x:Name="MaxErrorLabel"
+                   Text=""
+                   FontSize="12"
+                   TextColor="#B00020"
+                   IsVisible="False" />
+
+            <Label Text="Choose a value between 1 and 100."
+                   FontSize="12"
+                   TextColor="#777777" />
+
+            <!-- krzysiek ^ -->
 
             <Label Text="DANGER ZONE" FontSize="16" TextColor="#B00020" Margin="0,48,0,0" />
             <Label Text="Reset your course" FontSize="16" TextColor="#1C1E2B" />
