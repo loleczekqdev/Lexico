@@ -60,6 +60,27 @@
             </Border.GestureRecognizers>
 
             <Grid>
+
+
+                <!-- Przycisk serca do dodawania aktualnego słówka do ulubionych. -->
+                <Button
+                    Text="♡"
+                    FontSize="30"
+                    BackgroundColor="Transparent"
+                    TextColor="#E5484D"
+                    HorizontalOptions="End"
+                    VerticalOptions="Start"
+                    Command="{Binding ToggleFavoriteCommand}">
+                    <!-- Zmienia symbol serca, gdy słówko zostanie dodane do ulubionych. -->
+                    <Button.Triggers>
+                        <DataTrigger
+                            TargetType="Button"
+                            Binding="{Binding IsFavorite}"
+                            Value="True">
+                            <Setter Property="Text" Value="♥" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
                 <!-- Początkowo pokazujemy tylko słowo. -->
                 <VerticalStackLayout
                     IsVisible="{Binding IsFront}"

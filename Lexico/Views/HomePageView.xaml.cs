@@ -30,4 +30,9 @@ public partial class HomePageView : ContentPage
         try { await Navigation.PushAsync(new SettingsPageView()); }
         catch (Exception ex) { await DisplayAlert("Błąd", ex.Message, "OK"); }
     }
+
+    private void OnFavoritesBackClicked(object sender, EventArgs e)
+    {
+
+    }
 }

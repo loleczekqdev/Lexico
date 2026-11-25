@@ -1,5 +1,6 @@
 
 using System.Windows.Input;
+using Microsoft.Maui.Storage; // Udostępnia Preferences do zapisywania ulubionych.
 using Lexico.Services;
 
 namespace Lexico.ViewModels;
@@ -15,6 +16,10 @@ public class SessionPageViewModel : ViewModelBase
     double _progressValue;
     bool _isFlipped, _isFinished, _showStats;
 
+    int _wordId = -1; // Przechowuje ID aktualnego słówka.
+    bool _isFavorite; // Przechowuje stan ulubionego słówka.
+    const string FavoritesKey = "favoriteWords"; // Określa klucz zapisywania ulubionych.
+
     public string Word { get => _word; set => Set(ref _word, value); }
     public string Info { get => _info; set => Set(ref _info, value); }
     public string Phonetics { get => _phonetics; set => Set(ref _phonetics, value); }
@@ -26,6 +31,12 @@ public class SessionPageViewModel : ViewModelBase
     public string AlmostCount { get => _almostCount; set => Set(ref _almostCount, value); }
     public string NotKnownCount { get => _notKnownCount; set => Set(ref _notKnownCount, value); }
     public bool ShowStats { get => _showStats; set => Set(ref _showStats, value); }
+
+    public bool IsFavorite // Udostępnia stan ulubionego słówka dla XAML.
+    {
+        get => _isFavorite; // Zwraca aktualny stan serca.
+        set => Set(ref _isFavorite, value); // Aktualizuje stan i powiadamia interfejs.
+    }
 
     public bool IsFlipped
     {
@@ -44,12 +55,15 @@ public class SessionPageViewModel : ViewModelBase
 
     public ICommand FlipCommand { get; }
     public ICommand RateCommand { get; }
+
     //krzysiek
 
-    // Udostępnia komendę pomijania słówka, którą będzie wywoływał nowy przycisk w XAML.
+    // Udostępnia komendę pomijania słówka.
     public ICommand SkipCommand { get; }
 
     public ICommand RestartCommand { get; }
+
+    public ICommand ToggleFavoriteCommand { get; } // Udostępnia komendę przycisku serca.
 
     public SessionPageViewModel(string level)
     {
@@ -62,16 +76,40 @@ public class SessionPageViewModel : ViewModelBase
         // Tworzy komendę wykonywaną po kliknięciu przycisku „Pomiń”.
         SkipCommand = new Command(() =>
         {
-            // Wywołuje metodę Session.Skip(), która przesuwa indeks na następną kartę bez oceniania bieżącej.
+            // Pomija aktualne słówko bez wystawiania oceny.
             _session.Skip();
 
-            // Odświeża zawartość ekranu, aby wyświetlić następne słówko lub podsumowanie sesji.
+            // Wyświetla następne słówko.
             Show();
         });
 
         //krzysiek^
 
+        ToggleFavoriteCommand = new Command(() => // Tworzy obsługę kliknięcia serca.
+        {
+            if (_wordId == -1) return; // Kończy działanie, jeśli nie ma aktualnego słówka.
+
+            var favorites = GetFavoriteIds(); // Pobiera zapisane identyfikatory ulubionych.
+
+            if (!favorites.Add(_wordId)) // Próbuje dodać aktualne słówko.
+                favorites.Remove(_wordId); // Usuwa je, jeśli było już ulubione.
+
+            Preferences.Set(FavoritesKey, string.Join(",", favorites)); // Zapisuje zmiany na urządzeniu.
+
+            IsFavorite = favorites.Contains(_wordId); // Aktualizuje wygląd serca.
+        });
+
         RestartCommand = new Command(async () => await StartAsync());
+    }
+
+    HashSet<int> GetFavoriteIds() // Pobiera identyfikatory ulubionych słówek.
+    {
+        string saved = Preferences.Get(FavoritesKey, ""); // Odczytuje zapisane dane.
+
+        return saved.Split(',', StringSplitOptions.RemoveEmptyEntries) // Dzieli zapis na pojedyncze ID.
+            .Select(id => int.TryParse(id, out int number) ? number : -1) // Zamienia tekst na liczby.
+            .Where(id => id >= 0) // Odrzuca nieprawidłowe identyfikatory.
+            .ToHashSet(); // Tworzy zbiór identyfikatorów.
     }
 
     public async Task StartAsync()
@@ -100,6 +138,9 @@ public class SessionPageViewModel : ViewModelBase
 
         if (card == null)
         {
+            _wordId = -1; // Zeruje ID, gdy sesja nie ma już aktualnego słówka.
+            IsFavorite = false; // Wyłącza serce po zakończeniu sesji.
+
             var c = _session.Counts;
             NotKnownCount = c[0].ToString();
             AlmostCount = c[1].ToString();
@@ -111,6 +152,10 @@ public class SessionPageViewModel : ViewModelBase
         }
 
         Word = card.Value.Word;
+
+        _wordId = card.Id; // Zapamiętuje ID wyświetlanego słówka.
+        IsFavorite = GetFavoriteIds().Contains(_wordId); // Sprawdza, czy słówko jest ulubione.
+
         Info = $"{card.Value.Type} · {card.Value.Level}";
         Phonetics = card.Value.Phonetics.Us;
         Examples = card.Value.Examples;

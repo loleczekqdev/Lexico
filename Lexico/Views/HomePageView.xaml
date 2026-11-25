@@ -1,71 +1,131 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:Lexico.ViewModels"
-             x:Class="Lexico.Views.HomePageView"
-             x:DataType="vm:HomePageViewModel"
-             BackgroundColor="White"
-             NavigationPage.HasNavigationBar="False">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Lexico.ViewModels"
+    x:Class="Lexico.Views.HomePageView"
+    x:DataType="vm:HomePageViewModel"
+    BackgroundColor="White"
+    NavigationPage.HasNavigationBar="False">
+
 
     <ContentPage.Resources>
+        <!-- Zasoby wykorzystywane na ekranie. -->
         <Style x:Key="Value" TargetType="Label">
+            <!-- Styl większych wartości statystycznych. -->
             <Setter Property="FontSize" Value="20" />
+            <!-- Ustawia rozmiar tekstu. -->
             <Setter Property="TextColor" Value="#1C1E2B" />
+            <!-- Ustawia kolor tekstu. -->
         </Style>
+        <!-- Koniec stylu Value. -->
         <Style x:Key="Caption" TargetType="Label">
+            <!-- Styl opisów statystyk. -->
             <Setter Property="FontSize" Value="14" />
+            <!-- Ustawia rozmiar opisów. -->
             <Setter Property="TextColor" Value="#9A9CA8" />
+            <!-- Ustawia kolor opisów. -->
         </Style>
+        <!-- Koniec stylu Caption. -->
     </ContentPage.Resources>
+    <!-- Koniec zasobów. -->
 
     <ScrollView>
+        <!-- Umożliwia przewijanie ekranu. -->
         <VerticalStackLayout Padding="24,48,24,24" Spacing="16">
+            <!-- Układa elementy jeden pod drugim. -->
 
             <Grid ColumnDefinitions="*,Auto">
+                <!-- Tworzy układ dwóch kolumn. -->
                 <VerticalStackLayout>
+                    <!-- Grupuje godzinę i datę. -->
                     <Label Text="{Binding Time}" FontSize="24" TextColor="#2B2D42" />
+                    <!-- Wyświetla aktualną godzinę. -->
                     <Label Text="{Binding Date}" FontSize="40" TextColor="#1C1E2B" />
+                    <!-- Wyświetla aktualną datę. -->
                 </VerticalStackLayout>
+                <!-- Koniec grupy daty i godziny. -->
                 <Label Grid.Column="1" Text="⚙" FontSize="28" TextColor="#2F5089" VerticalOptions="Start">
+                    <!-- Wyświetla ikonę ustawień. -->
                     <Label.GestureRecognizers>
+                        <!-- Definiuje obsługę kliknięcia ikony. -->
                         <TapGestureRecognizer Tapped="OnSettingsTapped" />
+                        <!-- Otwiera ustawienia po kliknięciu. -->
                     </Label.GestureRecognizers>
+                    <!-- Koniec obsługi kliknięcia. -->
                 </Label>
+                <!-- Koniec ikony ustawień. -->
             </Grid>
+            <!-- Koniec górnego układu. -->
 
-            <Border BackgroundColor="#E6E8EE" StrokeThickness="0" StrokeShape="RoundRectangle 12"
-                    HeightRequest="180" Padding="24">
+            <!-- Tworzy kartę pozostałych słówek. -->
+            <Border BackgroundColor="#E6E8EE" StrokeThickness="0" StrokeShape="RoundRectangle 12" 
+                HeightRequest="180" Padding="24">
+                <!-- Ustawia wysokość i wewnętrzne odstępy karty. -->
                 <Border.Shadow>
+                    <!-- Definiuje cień karty. -->
                     <Shadow Brush="Black" Opacity="0.25" Radius="6" Offset="0,3" />
+                    <!-- Ustawia wygląd cienia. -->
                 </Border.Shadow>
+                <!-- Koniec ustawień cienia. -->
                 <VerticalStackLayout VerticalOptions="End">
+                    <!-- Układa zawartość karty od dołu. -->
                     <Label Text="{Binding WordsLeft}" FontSize="44" FontAttributes="Bold" TextColor="#2F5089" />
+                    <!-- Wyświetla liczbę pozostałych słówek. -->
                     <Label Text="words left to learn today" FontSize="20" TextColor="#2B2D42" />
+                    <!-- Opisuje liczbę pozostałych słówek. -->
                 </VerticalStackLayout>
+                <!-- Koniec zawartości karty. -->
             </Border>
+            <!-- Koniec karty pozostałych słówek. -->
 
-            <Button Text="Start Recalling" Clicked="OnStartClicked"
-                    BackgroundColor="#2F5089" TextColor="White" CornerRadius="8" />
+            <Button Text="Start Recalling" Clicked="OnStartClicked" 
+                BackgroundColor="#2F5089" TextColor="White" CornerRadius="8" />
+                <!-- Ustawia wygląd przycisku. -->
 
-            <Label Text="{Binding CourseTitle}" FontSize="24" TextColor="#1C1E2B" Margin="0,16,0,0" />
+                <Label Text="{Binding CourseTitle}" FontSize="24" TextColor="#1C1E2B" Margin="0,16,0,0" />
+                <!-- Wyświetla nazwę kursu. -->
 
-            <VerticalStackLayout>
-                <Label Text="{Binding Percent}" Style="{StaticResource Value}" />
-                <Label Text="Course Progress" Style="{StaticResource Caption}" />
-            </VerticalStackLayout>
-            <VerticalStackLayout>
-                <Label Text="{Binding Reviewed}" Style="{StaticResource Value}" />
-                <Label Text="Words Reviewed" Style="{StaticResource Caption}" />
-            </VerticalStackLayout>
-            <VerticalStackLayout>
-                <Label Text="{Binding ToReview}" Style="{StaticResource Value}" />
-                <Label Text="Words to Review Again" Style="{StaticResource Caption}" />
-            </VerticalStackLayout>
-            <VerticalStackLayout>
-                <Label Text="{Binding Learned}" Style="{StaticResource Value}" />
-                <Label Text="Words Learned" Style="{StaticResource Caption}" />
-            </VerticalStackLayout>
+                <VerticalStackLayout Spacing="8">
+                    <!-- Grupuje procent i pasek postępu. -->
+                    <Label Text="{Binding Percent}" Style="{StaticResource Value}" />
+                    <!-- Wyświetla procent opanowanych słówek. -->
+                    <ProgressBar Progress="{Binding CourseProgress}" ProgressColor="#2F5089" BackgroundColor="#E6E8EE" HeightRequest="12" />
+                    <!-- Wyświetla graficzny pasek postępu. -->
+                    <Label Text="Course Progress" Style="{StaticResource Caption}" />
+                    <!-- Wyświetla opis postępu kursu. -->
+                </VerticalStackLayout>
+                <!-- Koniec grupy procentu i paska. -->
+
+                <VerticalStackLayout>
+                    <!-- Grupuje statystykę powtórzonych słówek. -->
+                    <Label Text="{Binding Reviewed}" Style="{StaticResource Value}" />
+                    <!-- Wyświetla liczbę powtórzonych słówek. -->
+                    <Label Text="Words Reviewed" Style="{StaticResource Caption}" />
+                    <!-- Opisuje statystykę powtórzonych słówek. -->
+                </VerticalStackLayout>
+                <!-- Koniec statystyki powtórzonych słówek. -->
+
+                <VerticalStackLayout>
+                    <!-- Grupuje statystykę słówek do powtórzenia. -->
+                    <Label Text="{Binding ToReview}" Style="{StaticResource Value}" />
+                    <!-- Wyświetla liczbę słówek do powtórzenia. -->
+                    <Label Text="Words to Review Again" Style="{StaticResource Caption}" />
+                    <!-- Opisuje statystykę słówek do powtórzenia. -->
+                </VerticalStackLayout>
+                <!-- Koniec statystyki słówek do powtórzenia. -->
+
+                <VerticalStackLayout>
+                    <!-- Grupuje statystykę opanowanych słówek. -->
+                    <Label Text="{Binding Learned}" Style="{StaticResource Value}" />
+                    <!-- Wyświetla liczbę opanowanych słówek. -->
+                    <Label Text="Words Learned" Style="{StaticResource Caption}" />
+                    <!-- Opisuje statystykę opanowanych słówek. -->
+                </VerticalStackLayout>
+                <!-- Koniec statystyki opanowanych słówek. -->
 
         </VerticalStackLayout>
+        <!-- Koniec głównego układu ekranu. -->
     </ScrollView>
+    <!-- Koniec przewijanego obszaru. -->
 </ContentPage>
+<!-- Koniec strony. -->
